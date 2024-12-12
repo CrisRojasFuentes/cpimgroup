@@ -1,0 +1,76 @@
+{
+	"info": {
+		"_postman_id": "c808920e-4cb7-4252-8ebb-b62a235897b5",
+		"name": "Examen",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40398367"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/usuario/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \r\n    \"name\": \"cris\",\r\n    \"email\": \"camao@cs.cl\",\r\n    \"password\": \"Ws2w2s%d3\",\r\n    \"isActive\": true,\r\n    \"phones\": [\r\n        {\r\n        \"number\": \"17\",\r\n        \"citycode\": \"3\",\r\n        \"contrycode\": \"27\"\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/usuario/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"usuario",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/usuario/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/usuario/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"usuario",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/usuario/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/usuario/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"usuario",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

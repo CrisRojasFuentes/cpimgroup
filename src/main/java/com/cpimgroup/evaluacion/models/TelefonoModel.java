@@ -1,24 +1,21 @@
 package com.cpimgroup.evaluacion.models;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 
 @Entity
-public class TelefonoModel {//implements Serializable {
+public class TelefonoModel implements Serializable {
 
 	/**
 	 * 
 	 */
-	//private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +24,8 @@ public class TelefonoModel {//implements Serializable {
 	private String citycode;
 	private String contrycode;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "usuario_id")
+	@ManyToOne
+	@JoinColumn(name = "usuario")
 	private UsuarioModel usuario;
 	
 	public Long getId() {

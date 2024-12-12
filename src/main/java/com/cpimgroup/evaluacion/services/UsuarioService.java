@@ -3,7 +3,6 @@ package com.cpimgroup.evaluacion.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.cpimgroup.evaluacion.dto.UsuarioResponseDTO;
 import com.cpimgroup.evaluacion.models.TelefonoModel;
 import com.cpimgroup.evaluacion.models.UsuarioModel;
+import com.cpimgroup.evaluacion.repositories.ITelefonoRepository;
 import com.cpimgroup.evaluacion.repositories.IUsuarioRepository;
 
 @Service
@@ -28,6 +28,9 @@ public class UsuarioService {
 	
 	@Autowired
 	private IUsuarioRepository repository;
+	
+	@Autowired
+	private ITelefonoRepository telefonoRepository;
 	
 	@Autowired
 	private TokenService tokenService;
@@ -49,8 +52,11 @@ public class UsuarioService {
 		}
 		
 		usuario.setActive(true);
-		usuario = repository.save(usuario);
 		
+		usuario = repository.save(usuario);
+		telefonoRepository.save(usuario.getPhones().get(0));
+		usuario.addPhone(usuario.getPhones().get(0));
+		System.out.println(usuario.toString());
 		String token = tokenService.generateToken();
 		return new UsuarioResponseDTO(usuario.getId(),usuario.getName(), usuario.getEmail(), usuario.getCreated(), usuario.getModified(), usuario.getLastLogin(), token, usuario.isActive());
 	}
@@ -64,8 +70,21 @@ public class UsuarioService {
 	}
 	
 	public List<UsuarioModel> getAllUsuario(){
+		List<UsuarioModel> lista = repository.findAll();
+		List<TelefonoModel> lista2 = telefonoRepository.findAll();
+		for(int i = 0; i < lista.size(); i++) {
+			List<TelefonoModel> listaFono = new ArrayList<>();
+			for(int j = 0; j< lista2.size(); j++) {
+				//if(lista.get(i).getId() == lista2.get(j).getUsuario().getId()) {
+					listaFono.add(lista2.get(j));
+				//}
+			}
+			
+			lista.get(i).setPhones(listaFono);
+		}
 		
-		return repository.findAll();
+		System.out.println(lista.get(0).toString());
+		return lista;
 	}
 	
 	public UsuarioResponseDTO getByIdUsuario(Long id) {
@@ -73,9 +92,10 @@ public class UsuarioService {
 		
 		if(usuOpt.isPresent()) {
 			UsuarioModel usuario = usuOpt.get();
-			
+			telefonoRepository.findById(id);
+			System.out.println(usuOpt.get().getPhones().toString());
 			String token = tokenService.generateToken();
-			
+			System.out.println("u:"+usuario);
 			return new UsuarioResponseDTO(usuario.getId(),usuario.getName(), usuario.getEmail(), usuario.getCreated(), usuario.getModified(), usuario.getLastLogin(), token, usuario.isActive());
 		}else {
 			throw new RuntimeException("Usuario no encontrado");
@@ -92,15 +112,15 @@ public class UsuarioService {
 		
 		List<TelefonoModel> listaTelefono = new ArrayList<>();
 		
-//		for(TelefonoModel fono : u.getPhones()) {
-//			TelefonoModel t = new TelefonoModel();
-//			t.setCitycode(fono.getCitycode());
-//			t.setContrycode(fono.getContrycode());
-//			t.setNumber(fono.getNumber());
-//			listaTelefono.add(t);	
-//		}
+		for(TelefonoModel fono : u.getPhones()) {
+			TelefonoModel t = new TelefonoModel();
+			t.setCitycode(fono.getCitycode());
+			t.setContrycode(fono.getContrycode());
+			t.setNumber(fono.getNumber());
+			listaTelefono.add(t);	
+		}
 		
-		//usu.setPhones(listaTelefono);
+		usu.setPhones(listaTelefono);
 		return repository.save(usu);
 	}
 	

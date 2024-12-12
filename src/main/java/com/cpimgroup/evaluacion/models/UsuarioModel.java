@@ -1,21 +1,13 @@
 package com.cpimgroup.evaluacion.models;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -50,8 +42,13 @@ public class UsuarioModel implements Serializable {
 	
 	private boolean isActive;
 	
-	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<TelefonoModel> telefonoModel = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+	private List<TelefonoModel> phones = new ArrayList<>();
+	
+	public void addPhone(TelefonoModel t) {
+		phones.add(t);
+		t.setUsuario(this);
+	}
 	
 	@PrePersist
 	protected void onCreate() {
@@ -133,13 +130,22 @@ public class UsuarioModel implements Serializable {
 		this.isActive = isActive;
 	}
 
-	public List<TelefonoModel> getTelefonoModel() {
-		return telefonoModel;
+	public List<TelefonoModel> getPhones() {
+		return phones;
 	}
 
-	public void setTelefonoModel(List<TelefonoModel> telefonoModel) {
-		this.telefonoModel = telefonoModel;
+	public void setPhones(List<TelefonoModel> phones) {
+		this.phones = phones;
 	}
+
+	@Override
+	public String toString() {
+		return "UsuarioModel [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password
+				+ ", created=" + created + ", modified=" + modified + ", lastLogin=" + lastLogin + ", isActive="
+				+ isActive + ", phones=" + phones + "]";
+	}
+
+	
 	
 	
 	
